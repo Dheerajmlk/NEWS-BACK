@@ -23,9 +23,6 @@ app.use((req, res, next) => {
 // ✅ FINAL CORS FIX (VERY IMPORTANT)
 app.use(cors());
 
-// ✅ HANDLE PREFLIGHT REQUESTS (CRITICAL FOR CORS)
-app.options('*', cors());
-
 // ✅ BODY PARSER
 app.use(express.json());
 
