@@ -21,18 +21,7 @@ app.use((req, res, next) => {
 });
 
 // ✅ FINAL CORS FIX (VERY IMPORTANT)
-app.use(cors({
-  origin: [
-    'http://localhost:5173',
-    'http://127.0.0.1:5173',
-    'http://localhost:5174',
-    'http://127.0.0.1:5174',
-    'https://news-front-naoyihq5q-dheerajs-projects-662fbfc6.vercel.app'
-  ],
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true
-}));
+app.use(cors());
 
 // ✅ HANDLE PREFLIGHT REQUESTS (CRITICAL FOR CORS)
 app.options('*', cors());
