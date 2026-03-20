@@ -22,10 +22,11 @@ app.use((req, res, next) => {
 // ✅ CORS FIX (IMPORTANT)
 app.use(cors({
   origin: [
-    'http://localhost:5173',
-    'http://127.0.0.1:5173',
-    'http://localhost:5174',        
-    'http://127.0.0.1:5174'         
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://localhost:5174",
+    "http://127.0.0.1:5174",
+    "https://news-front-4fnw-b2v41yaq4-dheerajs-projects-662fbfc6.vercel.app"
   ],
   credentials: true
 }));
