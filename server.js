@@ -9,6 +9,7 @@ const initCronJobs = require('./utils/cronJobs');
 const newsRoutes = require('./routes/newsRoutes');
 const authRoutes = require('./routes/authRoutes');
 
+// ✅ CONNECT DB
 connectDB();
 
 const app = express();
@@ -19,17 +20,24 @@ app.use((req, res, next) => {
   next();
 });
 
-// ✅ CORS FIX (IMPORTANT)
+// ✅ FINAL CORS FIX (VERY IMPORTANT)
 app.use(cors({
   origin: [
     'http://localhost:5173',
     'http://127.0.0.1:5173',
+    'http://localhost:5174',
+    'http://127.0.0.1:5174',
     'https://news-front-naoyihq5q-dheerajs-projects-662fbfc6.vercel.app'
   ],
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 }));
 
+// ✅ HANDLE PREFLIGHT REQUESTS (CRITICAL FOR CORS)
+app.options('*', cors());
+
+// ✅ BODY PARSER
 app.use(express.json());
 
 // ✅ TEST ROUTE
@@ -46,14 +54,14 @@ app.get('/', (req, res) => {
   res.send('Backend running 🚀');
 });
 
-// ✅ CRON
+// ✅ CRON JOBS
 initCronJobs();
 
-// ✅ ERROR HANDLER
+// ✅ ERROR HANDLING
 app.use(notFound);
 app.use(errorHandler);
 
-// ✅ SERVER START
+// ✅ START SERVER
 const PORT = process.env.PORT || 5050;
 
 app.listen(PORT, () => {
