@@ -2,7 +2,6 @@ const Article = require('../models/Article');
 const { fetchCategoryNews } = require('../utils/gnews');
 const { validationResult } = require('express-validator');
 
-// 🔥 FETCH NEWS
 exports.fetchNewsManual = async (req, res, next) => {
   try {
     const errors = validationResult(req);
@@ -25,7 +24,40 @@ exports.fetchNewsManual = async (req, res, next) => {
   }
 };
 
-// 🔥 GET NEWS
+exports.createNews = async (req, res) => {
+  try {
+    const { title, description, image, url, category } = req.body;
+
+    const news = await Article.create({
+      title,
+      description,
+      image,
+      url,
+      category,
+
+      source: {
+        name: "Admin",
+        url: "",
+        country: "in"
+      },
+
+      isManual: true, 
+
+      language: "en", 
+      publishedAt: new Date()
+    });
+
+    res.status(201).json({
+      success: true,
+      data: news
+    });
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
 exports.getNews = async (req, res, next) => {
   try {
     const limit = parseInt(req.query.limit) || 20;
@@ -33,8 +65,6 @@ exports.getNews = async (req, res, next) => {
     const skip = (page - 1) * limit;
 
     const queryInfo = {};
-
-    // ✅ BETTER SEARCH (IMPORTANT FIX)
     if (req.query.q) {
       queryInfo.$or = [
         { title: { $regex: req.query.q, $options: 'i' } },
@@ -50,7 +80,6 @@ exports.getNews = async (req, res, next) => {
       queryInfo.language = req.query.lang;
     }
 
-    // ✅ FLEXIBLE COUNTRY FILTER
     if (req.query.country) {
       queryInfo['source.country'] = {
         $regex: req.query.country,
@@ -87,7 +116,7 @@ exports.getNews = async (req, res, next) => {
   }
 };
 
-// 🔥 DELETE NEWS (NEW - IMPORTANT)
+
 exports.deleteNews = async (req, res) => {
   const article = await Article.findById(req.params.id);
 

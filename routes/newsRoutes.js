@@ -11,17 +11,19 @@ const {
 
 const { protect } = require('../middleware/authMiddleware');
 
-// 🔥 RATE LIMIT FOR FETCH
 const fetchLimiter = rateLimit({
   windowMs: 60 * 60 * 1000,
-  max: 100, // ✅ increase
+  max: 100, 
   message: 'Too many fetch requests, try again later'
 });
 
-// ✅ GET NEWS (PUBLIC)
+
 router.get('/', getNews);
 
-// ✅ FETCH NEWS (ADMIN)
+const { createNews } = require('../controllers/newsController');
+
+router.post('/create', protect, createNews);
+
 router.post(
   '/fetch',
   protect,
@@ -33,7 +35,8 @@ router.post(
   fetchNewsManual
 );
 
-// 🔥 DELETE NEWS (ADMIN)
+
 router.delete('/:id', protect, deleteNews);
+
 
 module.exports = router;

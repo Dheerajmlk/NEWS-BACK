@@ -43,7 +43,11 @@ const articleSchema = new mongoose.Schema({
   language: {
     type: String,
     index: true
-  }
+  },
+  isManual: {
+  type: Boolean,
+  default: false
+}
 }, { timestamps: true });
 
 // Auto-delete articles older than 7 days based on createdAt field
